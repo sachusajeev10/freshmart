@@ -86,7 +86,7 @@ function FarmerLogin() {
                             </div>
 
                             {/* Login Form */}
-                            <form className={`auth-form ${isLogin ? 'active' : ''}`} onSubmit={(e) => { e.preventDefault(); navigate('/home'); }}>
+                            <form className={`auth-form ${isLogin ? 'active' : ''}`} onSubmit={(e) => { e.preventDefault(); navigate('/farmer-dashboard'); }}>
                                 <h2>Seller Portal</h2>
                                 <p className="subtitle">Manage your inventory and track your daily orders.</p>
 
@@ -116,7 +116,7 @@ function FarmerLogin() {
                             </form>
 
                             {/* Sign Up Form */}
-                            <form className={`auth-form ${!isLogin ? 'active' : ''}`} onSubmit={(e) => { e.preventDefault(); navigate('/home'); }}>
+                            <form className={`auth-form ${!isLogin ? 'active' : ''}`} onSubmit={(e) => { e.preventDefault(); navigate('/farmer-dashboard'); }}>
                                 <h2>Partner Registration</h2>
                                 <p className="subtitle" style={{ marginBottom: '1rem' }}>Start selling your harvest directly to your community.</p>
 

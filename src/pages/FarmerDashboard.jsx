@@ -49,7 +49,7 @@ function FarmerDashboard() {
 
                     <div className="dashboard-header">
                         <h1>Farmer Dashboard</h1>
-                        <p>Welcome back! Let's get your fresh produce online.</p>
+                        <p>Welcome! Now you're a Partner. Let's list your first fresh product to start selling!</p>
                     </div>
 
                     <div className="dashboard-stats">
