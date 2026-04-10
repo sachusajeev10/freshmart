@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Product Details</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/Navbar.css">
+    <link rel="stylesheet" href="css/Footer.css">
+    <link rel="stylesheet" href="css/ProductDetails.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading Fresh Produce...</div>
+    </div>
+
+    <div class="page-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="home.html" class="navbar-logo">
+                    <i data-lucide="leaf" class="logo-icon" width="28" height="28"></i> FreshMart
+                </a>
+
+                <div class="navbar-search desktop-search">
+                    <form action="products.html">
+                        <input type="text" name="search" placeholder="Search for fresh groceries...">
+                        <button type="submit"><i data-lucide="search" width="20" height="20"></i></button>
+                    </form>
+                </div>
+
+                <div class="navbar-links desktop-links">
+                    <a href="home.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Products</a>
+                    <a href="farmers.html" class="nav-link">Fresh Farmers</a>
+                    <a href="orders.html" class="nav-link">Orders</a>
+                </div>
+
+                <div class="navbar-actions">
+                    <a href="cart.html" class="nav-action-btn cart-btn">
+                        <i data-lucide="shopping-cart" width="24" height="24"></i>
+                        <span class="cart-badge" id="cart-badge-count">0</span>
+                    </a>
+                    <a href="index.html" class="nav-action-btn user-btn desktop-user">
+                        <i data-lucide="user" width="24" height="24"></i>
+                    </a>
+                    <a href="index.html" class="nav-action-btn logout-btn" title="Logout" style="color: #ef4444;">
+                        <i data-lucide="log-out" width="24" height="24"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content detail-layout">
+            <div class="detail-container">
+
+                <button class="back-btn" onclick="window.history.back()">
+                    <i data-lucide="arrow-left" width="20" height="20"></i> Back
+                </button>
+
+                <div class="product-detail-grid">
+                    <!-- Image Gallery -->
+                    <div class="product-detail-image">
+                        <img id="detailImage"
+                            src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                            alt="Product Image">
+                    </div>
+
+                    <!-- Product Meta Data -->
+                    <div class="product-detail-info">
+                        <div class="detail-meta">
+                            <span id="detailCategory" class="category-tag">Vegetables</span>
+                            <span id="detailWeight" class="weight-tag">1 kg</span>
+                        </div>
+
+                        <h1 id="detailTitle" class="detail-title"></h1>
+
+                        <div id="detailBadges" style="margin-bottom: 1rem;"></div>
+
+                        <!-- Ratings successfully removed -->
+
+                        <div class="detail-price-box" id="detailPriceBox">
+                            <span id="detailPrice" class="detail-price">₹--</span>
+                        </div>
+
+                        <p class="detail-description">
+                            Freshly sourced produce delivered directly to your door. Our products go through strict
+                            quality checks to ensure maximum freshness and taste. Perfect for your daily cooking and
+                            healthy living.
+                        </p>
+
+                        <div class="farmer-card-mini">
+                            <div class="farmer-card-icon">
+                                <i data-lucide="shield-check" width="24" height="24" class="verified"></i>
+                            </div>
+                            <div>
+                                <h4 id="detailFarmerName"></h4>
+                            </div>
+                        </div>
+
+                        <div class="purchase-actions">
+                            <div class="quantity-selector">
+                                <button
+                                    onclick="let q=document.getElementById('qty'); q.innerText=Math.max(1, parseInt(q.innerText)-1);">-</button>
+                                <span id="qty">1</span>
+                                <button
+                                    onclick="let q=document.getElementById('qty'); q.innerText=parseInt(q.innerText)+1;">+</button>
+                            </div>
+
+                            <button class="btn btn-primary add-to-cart-large">
+                                <i data-lucide="shopping-cart" width="20" height="20"></i> Add to Cart
+                            </button>
+
+                            <button class="btn btn-secondary buy-now-large"
+                                style="background:#f59e0b; color:white; border:none; padding:0.8rem 1.5rem; border-radius:8px; font-weight:600; font-size:1rem; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:transform 0.2s ease;">
+                                <i data-lucide="zap" width="20" height="20"></i> Buy Now
+                            </button>
+
+                            <button class="btn-icon">
+                                <i data-lucide="heart" width="24" height="24"></i>
+                            </button>
+                        </div>
+
+                        <div class="delivery-info">
+                            <div class="delivery-row">
+                                <i data-lucide="truck" width="20" height="20" color="#2ECC71"></i>
+                                <span><strong>Free Delivery</strong> on orders over ₹300</span>
+                            </div>
+                            <div class="delivery-row">
+                                <i data-lucide="shield-check" width="20" height="20" color="#2ECC71"></i>
+                                <span><strong>Quality Guarantee:</strong> Fresh or your money back</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-bottom">
+                    <p>&copy; 2026 FreshMart. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                // No ID provided, go back or to products
+                window.location.href = 'products.html';
+                return;
+            }
+
+            let product;
+            try {
+                const res = await fetch(`http://localhost:5000/api/products/${productId}`);
+                if (!res.ok) throw new Error();
+                product = await res.json();
+            } catch(e) {
+                alert('Product not found!');
+                window.location.href = 'products.html';
+                return;
+            }
+
+            // Populate DOM
+            document.title = `FreshMart - ${product.name}`;
+            const fallbackImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            const detailImg = document.getElementById('detailImage');
+            detailImg.src = product.image || fallbackImage;
+            detailImg.onerror = function() {
+                this.onerror = null;
+                this.src = fallbackImage;
+            };
+            detailImg.alt = product.name;
+            document.getElementById('detailTitle').innerText = product.name;
+            document.getElementById('detailCategory').innerText = product.category || 'Grocery';
+            document.getElementById('detailWeight').innerText = product.weight || '1 unit';
+            document.getElementById('detailFarmerName').innerText = product.farmerName || product.seller || 'FreshMart Verified';
+
+            if (product.mfdDate) {
+                const mfdBadge = `
+                    <span class="badge" style="background:#e0f2fe; color:#0284c7; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight:bold; font-size:0.8rem; margin-right: 0.5rem; display:inline-block; margin-bottom: 0.5rem;">
+                        <i data-lucide="package" width="14" height="14" style="vertical-align:middle; margin-right:4px;"></i> MFD: ${product.mfdDate}
+                    </span>
+                 `;
+                document.getElementById('detailBadges').insertAdjacentHTML('beforeend', mfdBadge);
+            }
+
+            if (product.expiryDate) {
+                const expiryBadge = `
+                    <span class="badge" style="background:#fee2e2; color:#b91c1c; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight:bold; font-size:0.8rem; margin-right: 0.5rem; display:inline-block; margin-bottom: 0.5rem;">
+                        <i data-lucide="calendar" width="14" height="14" style="vertical-align:middle; margin-right:4px;"></i> Expires: ${product.expiryDate}
+                    </span>
+                 `;
+                document.getElementById('detailBadges').insertAdjacentHTML('beforeend', expiryBadge);
+            }
+
+            // Farmer location removed
+
+            // Pricing logic
+            if (product.isDiscount && product.originalPrice) {
+                document.getElementById('detailPriceBox').innerHTML = `
+                    <span class="detail-price" style="color: #ef4444;">₹${product.price}</span>
+                    <span style="text-decoration: line-through; color: #94a3b8; font-size: 1.2rem; margin-left: 1rem;">₹${product.originalPrice}</span>
+                `;
+                document.getElementById('detailBadges').innerHTML = `
+                    <span class="badge" style="background:#fef08a; color:#854d0e; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight:bold; font-size:0.8rem;">
+                        <i data-lucide="clock" width="14" height="14" style="vertical-align:middle; margin-right:4px;"></i> Near Expiry
+                    </span>
+                `;
+                lucide.createIcons();
+            } else {
+                document.getElementById('detailPrice').innerText = '₹' + parseFloat(product.price).toFixed(2);
+            }
+
+            // Update add to cart button
+            const addBtn = document.querySelector('.add-to-cart-large');
+            if (addBtn) {
+                addBtn.onclick = () => {
+                    const qty = parseInt(document.getElementById('qty').innerText) || 1;
+                    const userJson = localStorage.getItem('fm_user');
+                    if (!userJson) {
+                        alert('Please log in to add items to your cart.');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    const user = JSON.parse(userJson);
+                    const cartKey = 'fm_cart_' + user.name;
+                    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                    const pId = product._id || product.id;
+                    const idx = cart.findIndex(item => (item._id || item.id) === pId);
+                    if (idx > -1) {
+                        cart[idx].qty += qty;
+                    } else {
+                        product.qty = qty;
+                        cart.push(product);
+                    }
+                    localStorage.setItem(cartKey, JSON.stringify(cart));
+                    if (window.updateCartBadge) window.updateCartBadge();
+                    alert(`${qty}x ${product.name} added to cart!`);
+                };
+            }
+
+            // Buy Now button logic
+            const buyBtn = document.querySelector('.buy-now-large');
+            if (buyBtn) {
+                buyBtn.onclick = () => {
+                    const qty = parseInt(document.getElementById('qty').innerText) || 1;
+                    const userJson = localStorage.getItem('fm_user');
+                    if (!userJson) {
+                        alert('Please log in for Buy Now.');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    const user = JSON.parse(userJson);
+                    const cartKey = 'fm_cart_' + user.name;
+                    let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                    const pId = product._id || product.id;
+                    const idx = cart.findIndex(item => (item._id || item.id) === pId);
+                    if (idx > -1) {
+                        cart[idx].qty += qty;
+                    } else {
+                        product.qty = qty;
+                        cart.push(product);
+                    }
+                    localStorage.setItem(cartKey, JSON.stringify(cart));
+                    window.location.href = 'checkout.html';
+                };
+            }
+
+            // Hide loading overlay
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                setTimeout(() => overlay.remove(), 500);
+            }
+        });
+    </script>
+    <script src="js/auth-ui.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Farmer Dashboard</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/Navbar.css">
+    <link rel="stylesheet" href="css/Footer.css">
+    <link rel="stylesheet" href="css/FarmerDashboard.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="home.html" class="navbar-logo">
+                    <i data-lucide="leaf" class="logo-icon" width="28" height="28"></i> FreshMart
+                </a>
+
+                <div class="navbar-search desktop-search" style="opacity: 0;">
+                    <!-- Hidden on dashboard to keep header clean -->
+                </div>
+
+                <div class="navbar-links desktop-links">
+                    <a href="farmer-dashboard.html" class="nav-link"
+                        style="color: var(--primary); font-weight: 600;">Dashboard</a>
+                    <!-- <a href="products.html" class="nav-link">Storefront</a> removed -->
+                </div>
+
+                <div class="navbar-actions">
+                    <a href="index.html" class="nav-action-btn user-btn desktop-user">
+                        <i data-lucide="user" width="24" height="24"></i>
+                    </a>
+                    <a href="index.html" class="nav-action-btn logout-btn" title="Logout" style="color: #ef4444;">
+                        <i data-lucide="log-out" width="24" height="24"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content dashboard-layout">
+            <div class="dashboard-container">
+
+                <style>
+                    .farmer-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1rem; }
+                    .tab-btn { background: none; border: none; font-size: 1.1rem; font-weight: 600; color: #64748b; cursor: pointer; padding: 0.5rem 1rem; position: relative; }
+                    .tab-btn.active { color: #2ECC71; }
+                    .tab-btn.active::after { content: ''; position: absolute; bottom: -17px; left: 0; width: 100%; height: 3px; background: #2ECC71; border-radius: 3px 3px 0 0; }
+                    .tab-content { display: none; }
+                    .tab-content.active { display: block; }
+                </style>
+                <div class="dashboard-header">
+                    <h1>Farmer Dashboard</h1>
+                    <p>Welcome back! Let's get your fresh produce online.</p>
+                </div>
+
+                <div class="farmer-tabs">
+                    <button class="tab-btn active" onclick="switchFarmerTab('dashboard')">Dashboard</button>
+                    <button class="tab-btn" onclick="switchFarmerTab('inventory')">My Inventory</button>
+                    <button class="tab-btn" onclick="switchFarmerTab('upload')">Upload New</button>
+                    <button class="tab-btn" onclick="switchFarmerTab('orders')">Order Requests</button>
+                </div>
+
+                <section id="tab-dashboard" class="tab-content active">
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="activity" width="24" height="24" color="#f59e0b"></i></div>
+                            <div>
+                                <p class="stat-title">Total Sales This Week</p>
+                                <h3 class="stat-value" id="farmerTotalSales">₹0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i data-lucide="package-open" width="24" height="24" color="#3b82f6"></i></div>
+                            <div>
+                                <p class="stat-title">Active Inventory</p>
+                                <h3 class="stat-value" id="farmerActiveInventory">0 Items</h3>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tab-upload" class="tab-content">
+                    <div class="upload-section">
+                        <div class="upload-header">
+                            <h2><i data-lucide="plus" width="24" height="24"></i> Add New Product</h2>
+                        </div>
+
+                        <form id="farmerUploadForm" class="upload-form">
+                            <div class="form-row">
+                                <div class="input-block">
+                                    <label>Product Name</label>
+                                    <input type="text" name="name" required placeholder="e.g. Fresh Organic Carrots">
+                                </div>
+                                <div class="input-block">
+                                    <label>Selling Price (₹)</label>
+                                    <input type="number" name="price" required min="1" placeholder="e.g. 45">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="input-block">
+                                    <label>Category</label>
+                                    <select name="category">
+                                        <option value="Vegetables">Vegetables</option>
+                                        <option value="Fruits">Fruits</option>
+                                        <option value="Dairy">Dairy</option>
+                                        <option value="Grains">Grains</option>
+                                        <option value="Organic Products">Organic Products</option>
+                                    </select>
+                                </div>
+                                <div class="input-block">
+                                    <label>Weight / Quantity Label</label>
+                                    <input type="text" name="weight" required placeholder="e.g. 1 kg, 1 Dozen, 500g">
+                                </div>
+                            </div>
+                                <div class="form-row" id="farmerDatesRow">
+                                    <div class="input-block">
+                                        <label>Manufacturing Date (MFD)</label>
+                                        <input type="date" name="mfdDate">
+                                    </div>
+                                    <div class="input-block">
+                                        <label>Expiry Date</label>
+                                        <input type="date" name="expiryDate" required>
+                                    </div>
+                                </div>
+
+                                <div class="input-block" style="margin-top: 1.5rem;">
+                                    <label>Product Image</label>
+                                    <input type="file" name="image" accept="image/*" required>
+                                    <p class="input-hint">For best results, use a square, well-lit photo of your product.
+                                    </p>
+                                </div>
+
+                                <div class="form-row" style="margin-top: 1.5rem;">
+                                    <div class="input-block">
+                                        <label>Farm/Shop Name (Public)</label>
+                                        <input type="text" name="farmer" value="Green Valley Farms" required>
+                                    </div>
+                                    <div class="input-block">
+                                        <label>Location (Public)</label>
+                                        <input type="text" name="farmLocation" value="Outskirts, Sector 62" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary submit-product-btn" style="border-radius:24px; margin-top: 1.5rem;">Upload Product</button>
+                        </form>
+                    </div>
+                </section>
+
+                <section id="tab-inventory" class="tab-content">
+                    <div class="tracking-section">
+                        <div class="upload-header">
+                            <h2><i data-lucide="list" width="24" height="24"></i> My Uploads & Inventory</h2>
+                        </div>
+                        <div class="tracking-container" style="background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 4px 25px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                <thead>
+                                    <tr style="text-align: left; border-bottom: 2px solid #f1f5f9; color: #64748b;">
+                                        <th style="padding: 1rem;">Product Segment</th>
+                                        <th style="padding: 1rem;">Category</th>
+                                        <th style="padding: 1rem;">Price</th>
+                                        <th style="padding: 1rem;">Status</th>
+                                        <th style="padding: 1rem;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="farmerTrackingBody">
+                                    <tr><td colspan="5" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading inventory data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="tab-orders" class="tab-content">
+                    <div class="tracking-section">
+                        <div class="upload-header">
+                            <h2><i data-lucide="shopping-bag" width="24" height="24"></i> Order Requests</h2>
+                        </div>
+                        <div class="tracking-container" style="background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 4px 25px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                <thead>
+                                    <tr style="text-align: left; border-bottom: 2px solid #f1f5f9; color: #64748b;">
+                                        <th style="padding: 1rem;">Order ID</th>
+                                        <th style="padding: 1rem;">Date</th>
+                                        <th style="padding: 1rem;">Items</th>
+                                        <th style="padding: 1rem;">Verification Process</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="farmerOrdersBody">
+                                    <tr><td colspan="4" style="text-align: center; padding: 2rem; color: #94a3b8;">Loading orders...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div>
+            </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-bottom">
+                    <p>&copy; 2026 FreshMart. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        
+        function switchFarmerTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('.tab-btn[onclick="switchFarmerTab(\'' + tabId + '\')"]').classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+            if (tabId === 'inventory') loadMyUploads();
+            if (tabId === 'orders') loadFarmerOrders();
+        }
+
+        function deleteFarmerProduct(id) {
+            if(!confirm("Are you sure you want to remove this product from your inventory?")) return;
+            fetch('http://localhost:5000/api/products/' + id, { method: 'DELETE' })
+                .then(res => res.json())
+                .then(() => {
+                    loadMyUploads();
+                })
+                .catch(err => alert("Failed to delete product."));
+        }
+
+        function loadMyUploads() {
+            const userJson = localStorage.getItem('fm_farmer');
+            if (!userJson) return;
+            const user = JSON.parse(userJson);
+            fetch('http://localhost:5000/api/products/farmer/' + encodeURIComponent(user.name))
+                .then(res => res.json())
+                .then(products => {
+                    const tbody = document.getElementById('farmerTrackingBody');
+                    tbody.innerHTML = '';
+                    let activeCount = 0;
+                    
+                    if (products.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No products in inventory.</td></tr>';
+                        document.getElementById('farmerActiveInventory').innerText = '0 Items';
+                        return;
+                    }
+                    products.forEach(p => {
+                        let statusColor = '#f59e0b';
+                        let statusText = 'Processing';
+                        if (p.status === 'approved') {
+                            statusColor = '#2ECC71';
+                            statusText = 'Approved';
+                            activeCount++;
+                        } else if (p.status === 'rejected') {
+                            statusColor = '#ef4444';
+                            statusText = 'Rejected';
+                        }
+                        const tr = document.createElement('tr');
+                        const pId = p._id || p.id;
+                        tr.innerHTML = `
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <img src="${p.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">
+                                    <strong>${p.name}</strong>
+                                </div>
+                            </td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">${p.category}</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9; font-weight: 600;">₹${p.price}</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">
+                                <span style="background: ${statusColor}15; color: ${statusColor}; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: 600;">${statusText}</span>
+                            </td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">
+                                <button onclick="deleteFarmerProduct('${pId}')" style="background:none; border:none; color:#ef4444; cursor:pointer;" title="Delete Product">
+                                    <i data-lucide="trash-2" width="18" height="18"></i>
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    document.getElementById('farmerActiveInventory').innerText = activeCount + ' Items';
+                    if (window.lucide) window.lucide.createIcons();
+                });
+        }
+        function loadSales() {
+            const userJson = localStorage.getItem('fm_farmer');
+            if(!userJson) return;
+            const user = JSON.parse(userJson);
+            fetch('http://localhost:5000/api/orders/farmer/' + encodeURIComponent(user.name))
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById('farmerTotalSales');
+                    if (el) el.innerText = '₹' + (data.totalSales || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2});
+                })
+                .catch(err => console.error("Sales fetch err", err));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMyUploads();
+            loadSales();
+        });
+
+        function loadFarmerOrders() {
+            const userJson = localStorage.getItem('fm_farmer');
+            if (!userJson) return;
+            const user = JSON.parse(userJson);
+            fetch('http://localhost:5000/api/orders/farmer-orders/' + encodeURIComponent(user.name))
+                .then(res => res.json())
+                .then(orders => {
+                    const tbody = document.getElementById('farmerOrdersBody');
+                    if (!tbody) return;
+                    tbody.innerHTML = '';
+                    if (orders.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">No orders yet.</td></tr>';
+                        return;
+                    }
+                    orders.forEach(order => {
+                        let items = Array.isArray(order.items) ? order.items : [];
+                        let itemsHtml = items.filter(i => i.uploader === user.name).map(i => `${i.name} (x${i.quantity || 1})`).join('<br>');
+                        
+                        let verificationHtml = '';
+                        if (order.qualityStatus === 'Uploaded') {
+                            verificationHtml = `<span style="color: #2ECC71; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem;"><i data-lucide="check-circle" width="16" height="16"></i> Uploaded</span>`;
+                        } else {
+                            verificationHtml = `
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;">
+                                    <input type="file" id="proof-${order.id}" accept="image/*" style="font-size: 0.8rem; width: 100%; max-width: 200px;">
+                                    <button onclick="uploadProof('${order.id}')" class="btn btn-primary" style="padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem; height: auto;">Upload Photo Proof</button>
+                                </div>
+                            `;
+                        }
+                        
+                        const dateStr = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.date;
+                        
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9; font-weight: 600;">${order.id}</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9; color: #64748b;">${dateStr}</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; color: #1e293b;">${itemsHtml}</td>
+                            <td style="padding: 1rem; border-bottom: 1px solid #f1f5f9;">${verificationHtml}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    if (window.lucide) window.lucide.createIcons();
+                })
+                .catch(err => {
+                    console.error("Error loading orders", err);
+                    const tbody = document.getElementById('farmerOrdersBody');
+                    if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: #ef4444;">Failed to load orders. Please make sure the backend server was restarted.</td></tr>';
+                });
+        }
+
+        async function uploadProof(orderId) {
+            const fileInput = document.getElementById('proof-' + orderId);
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select a photo proof first.');
+                return;
+            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            try {
+                const res = await fetch(`http://localhost:5000/api/orders/${orderId}/quality-photo`, {
+                    method: 'PUT',
+                    body: formData
+                });
+                if (res.ok) {
+                    alert('Photo proof of freshness uploaded successfully!');
+                    loadFarmerOrders();
+                } else {
+                    const data = await res.json();
+                    alert(data.message || 'Upload failed');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred during upload.');
+            }
+        }
+
+        // Suppress original DOMContentLoaded
+        // lucide.createIcons();
+        lucide.createIcons();
+
+        // Expiry logic securely overridden
+
+        // Farmer Product Upload Logic
+        const uploadForm = document.getElementById('farmerUploadForm');
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Create new product object
+                const form = new FormData(uploadForm);
+                form.append('seller', 'Farmer');
+                form.append('status', 'pending');
+                const userJson = localStorage.getItem('fm_farmer');
+                if (userJson) {
+                    const u = JSON.parse(userJson);
+                    form.append('uploader', u.name);
+                }
+                // Expiry pruning removed since it is enforced globally
+
+                fetch('http://localhost:5000/api/products', {
+                    method: 'POST',
+                    body: form
+                })
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Upload failed');
+                    return data;
+                })
+                .then(data => {
+                    const overlay = document.getElementById('successOverlay');
+                    overlay.style.display = 'flex';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        uploadForm.reset();
+                        loadMyUploads();
+                    }, 2500);
+                })
+                .catch(err => {
+                    console.error('Error saving product:', err);
+                    alert('Failed to save product to the database.');
+                });
+            });
+        }
+    </script>
+<script src="js/auth-ui.js"></script>
+    <div id="successOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="success-animation">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <h2 style="color: #2ECC71; margin-top: 20px; font-size: 2.5rem; font-weight: 800;">Upload Successful!</h2>
+        <p style="color: #64748b; font-size: 1.1rem;">Your product is now awaiting admin approval.</p>
+    </div>
+</body>
+
+</html>

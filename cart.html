@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Shopping Cart</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/Navbar.css">
+    <link rel="stylesheet" href="css/Footer.css">
+    <link rel="stylesheet" href="css/Cart.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="home.html" class="navbar-logo">
+                    <i data-lucide="leaf" class="logo-icon" width="28" height="28"></i> FreshMart
+                </a>
+
+                <div class="navbar-search desktop-search">
+                    <form action="products.html">
+                        <input type="text" name="search" placeholder="Search for fresh groceries...">
+                        <button type="submit"><i data-lucide="search" width="20" height="20"></i></button>
+                    </form>
+                </div>
+
+                <div class="navbar-links desktop-links">
+                    <a href="home.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Products</a>
+                    <a href="farmers.html" class="nav-link">Fresh Farmers</a>
+                    <a href="orders.html" class="nav-link">Orders</a>
+                </div>
+
+                <div class="navbar-actions">
+                    <a href="cart.html" class="nav-action-btn cart-btn">
+                        <i data-lucide="shopping-cart" width="24" height="24"></i>
+                        <span class="cart-badge" id="cart-badge-count">0</span>
+                    </a>
+                    <a href="index.html" class="nav-action-btn user-btn desktop-user">
+                        <i data-lucide="user" width="24" height="24"></i>
+                    </a>
+                    <a href="index.html" class="nav-action-btn logout-btn" title="Logout" style="color: #ef4444;">
+                        <i data-lucide="log-out" width="24" height="24"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content cart-layout">
+            <div class="cart-container">
+
+                <div class="cart-main">
+                    <h1 class="page-title">Shopping Cart</h1>
+
+                    <div class="cart-items-list" id="cart-items">
+                        <!-- Dynamically populated -->
+                    </div>
+
+                    <div class="cart-delivery-promo" id="delivery-promo" style="display:none;">
+                        <div class="promo-icon">🚚</div>
+                        <div>
+                            <h4>Support Local Delivery</h4>
+                            <p>Your items are being consolidated from local farms to ensure maximum freshness while
+                                reducing carbon footprint.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="cart-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>₹<span id="subtotal">0</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee <span id="free-delivery-text"
+                                style="display:none; color: #2ECC71; font-size: 0.8rem;">(Free)</span></span>
+                        <span>₹<span id="delivery-fee">0</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Platform Fee</span>
+                        <span>₹<span id="platform-fee">0</span></span>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span>₹<span id="total-price">0</span></span>
+                    </div>
+
+                    <button onclick="window.location.href='checkout.html'" class="btn btn-primary checkout-btn"
+                        id="btn-checkout" disabled style="opacity:0.5; cursor:not-allowed;">
+                        Proceed to Checkout <i data-lucide="arrow-right" width="20" height="20"
+                            style="margin-left: 8px;"></i>
+                    </button>
+
+                    <a href="products.html" class="continue-shopping">
+                        Continue Shopping
+                    </a>
+                </aside>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-bottom">
+                    <p>&copy; 2026 FreshMart. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) window.lucide.createIcons();
+            loadCart();
+        });
+
+        function getCartKey() {
+            const userJson = localStorage.getItem('fm_user');
+            if (userJson) {
+                return 'fm_cart_' + JSON.parse(userJson).name;
+            }
+            return null;
+        }
+
+        function loadCart() {
+            const cartKey = getCartKey();
+            if (!cartKey) {
+                renderEmptyCart("Please log in to view your cart.");
+                return;
+            }
+            
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            if (cart.length === 0) {
+                renderEmptyCart("Your cart is empty.");
+                return;
+            }
+
+            const cartContainer = document.getElementById('cart-items');
+            cartContainer.innerHTML = '';
+
+            cart.forEach((item, index) => {
+                const sellerName = item.farmerName || item.seller || "FreshMart Verified";
+                const html = `
+                    <div class="cart-item" id="cart-idx-${index}">
+                        <img src="${item.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" alt="${item.name}" class="cart-item-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';">
+                        <div class="cart-item-details">
+                            <h3>${item.name}</h3>
+                            <div class="cart-item-farmer">
+                                <i data-lucide="shield-check" width="14" height="14" class="verified-icon"></i>
+                                <span>${sellerName}</span>
+                            </div>
+                        </div>
+                        <div class="cart-item-qty">
+                            <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                            <span class="qty-display">${item.qty}</span>
+                            <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                        <div class="cart-item-price" data-price="${item.price}">
+                            ₹<span class="price-display">${item.price * item.qty}</span>
+                        </div>
+                        <button class="cart-item-remove" onclick="removeItem(${index})">
+                            <i data-lucide="trash-2" width="20" height="20"></i>
+                        </button>
+                    </div>
+                `;
+                cartContainer.insertAdjacentHTML('beforeend', html);
+            });
+
+            if (window.lucide) window.lucide.createIcons();
+            updateTotals();
+        }
+
+        function renderEmptyCart(msg) {
+            document.getElementById('cart-items').innerHTML = `
+                <div style="padding: 2rem; text-align: center; color: #64748b;">
+                    <h3>${msg}</h3>
+                    <a href="products.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Start Shopping</a>
+                </div>
+            `;
+            updateTotals(true);
+        }
+
+        function updateTotals(isEmpty = false) {
+            let subtotal = 0;
+            const cartKey = getCartKey();
+            let totalItems = 0;
+            if (cartKey) {
+                const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+                totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            }
+
+            document.getElementById('subtotal').innerText = subtotal;
+
+            let deliveryFee = 0;
+            let platformFee = 0;
+
+            if (!isEmpty && subtotal > 0) {
+                platformFee = 2;
+                if (subtotal <= 300) {
+                    deliveryFee = 10;
+                    document.getElementById('free-delivery-text').style.display = 'none';
+                } else {
+                    document.getElementById('free-delivery-text').style.display = 'inline';
+                }
+                document.getElementById('delivery-promo').style.display = 'flex';
+                document.getElementById('btn-checkout').disabled = false;
+                document.getElementById('btn-checkout').style.opacity = '1';
+                document.getElementById('btn-checkout').style.cursor = 'pointer';
+            } else {
+                document.getElementById('delivery-promo').style.display = 'none';
+                document.getElementById('btn-checkout').disabled = true;
+                document.getElementById('btn-checkout').style.opacity = '0.5';
+                document.getElementById('btn-checkout').style.cursor = 'not-allowed';
+            }
+
+            document.getElementById('delivery-fee').innerText = deliveryFee;
+            document.getElementById('platform-fee').innerText = platformFee;
+            document.getElementById('total-price').innerText = subtotal + deliveryFee + platformFee;
+
+            document.querySelector('.page-title').innerText = `Shopping Cart (${totalItems} Items)`;
+            if (window.updateCartBadge) window.updateCartBadge();
+        }
+
+        window.updateQty = function(index, change) {
+            const cartKey = getCartKey();
+            if (!cartKey) return;
+            const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            if (cart[index]) {
+                if (cart[index].qty + change > 0) {
+                    cart[index].qty += change;
+                    localStorage.setItem(cartKey, JSON.stringify(cart));
+                    loadCart();
+                } else {
+                    // Remove if qty drops to 0
+                    window.removeItem(index);
+                }
+            }
+        };
+
+        window.removeItem = function(index) {
+            const cartKey = getCartKey();
+            if (!cartKey) return;
+            let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+            cart.splice(index, 1);
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            loadCart();
+        };
+    </script>
+    <script src="js/auth-ui.js"></script>
+</body>
+</html>
