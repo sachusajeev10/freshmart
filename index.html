@@ -72,10 +72,14 @@
                         <a href="#" class="forgot-password">Forgot Password?</a>
                     </div>
 
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" style="margin-bottom: 1.5rem;">
                         <span>Login</span>
                         <i data-lucide="arrow-right" width="20" height="20"></i>
                     </button>
+                    
+                    <div style="text-align: center; font-size: 0.95rem; color: var(--text-light);">
+                        Don't have an account? <a href="#" onclick="toggleForm(false); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Create account</a>
+                    </div>
                 </form>
 
                 <!-- Sign Up Form -->
@@ -103,10 +107,14 @@
                         <input type="password" placeholder="Password" required>
                     </div>
 
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" style="margin-bottom: 1.5rem;">
                         <span>Create Account</span>
                         <i data-lucide="arrow-right" width="20" height="20"></i>
                     </button>
+                    
+                    <div style="text-align: center; font-size: 0.95rem; color: var(--text-light);">
+                        Already have an account? <a href="#" onclick="toggleForm(true); return false;" style="color: var(--primary); text-decoration: none; font-weight: 600;">Login</a>
+                    </div>
                 </form>
             </div>
         </div>
